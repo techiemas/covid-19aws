@@ -227,5 +227,18 @@ static_datasets_state_abv=download_and_load_query_results(athena_client,response
 static_datasets_state_abv.head()
 
 
+# removing first row from table1 beause its showing c0 and c1
+
+new_header=static_datasets_state_abv.iloc[0] #grab the first row the header
+
+new_header
+
+
+static_datasets_state_abv=static_datasets_state_abv[1:]# take the data less the header row
+
+static_datasets_state_abv.columns=new_header# set the header row as the df header
+
+static_datasets_state_abv.head()
+
 
 
