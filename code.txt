@@ -288,4 +288,8 @@ dimDate=rearc_covid_19_testing_data_states_daily[['fips',date]]
 dimDate.head()
 
 dimDate.shape
+-------------------------------------------
+#converting date from dimDate
 
+
+dimDate['date'] = pd.to_datetime(dimDate['date'],format="%Y%m%d")
