@@ -11,3 +11,50 @@ SCHEMA_NAME ='covid_dataset' # athena database name
 S3_STAGING_DIR ='s3://vishnu-test-buck/output/' # query output will stored in output folder
 S3_BUCKET_NAME ='vishnu-test-buck'
 S3_OUTPUT_DIRECTORY ='output'
+
+
+# connecting to athena for query
+
+athena_client =boto3.client('athena',
+	aws_access_key_id=AWS_ACCESS_KEY,
+	aws_secret_access_key=AWS_SECRET_KEY,
+	region_name=AWS_RGION,)
+
+
+
+
+#defining function
+
+Dict={}
+
+def download_and_load_query_results(
+    client:boto3.client,query_response:Dict
+) ->pd.DataFrame:
+    while True:
+        try:
+            # This function only loads the first 1000 rows
+            client.get_query_results(
+            QueryExecutionId=query_response['QueryExecutionId']
+
+            )
+            break
+        except Exceptionn as err:
+            if 'not yet finished' in str(err):
+                time.sleep(0.001)
+            else:
+                raise err
+    temp_file_location:str ='athena_query_results.csv'
+    s3_client =boto3.client(
+        's3',
+        aws_access_key_id=AWS_ACCESS_KEY,
+        aws_secret_access_key=AWS_SECRET_KEY,
+        region_name=AWS_REGION,
+    )
+
+    s3_client.download_file(
+        S3_BUCKET_NAME,
+        f"{S3_OUTPUT_DIRECTORY}/{query_response['QueryExecutionId']}.csv",
+        temp_file_loaction,
+    )
+
+    return pd.read_csv(temp_file_location)
