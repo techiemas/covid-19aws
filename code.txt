@@ -226,7 +226,7 @@ static_datasets_state_abv=download_and_load_query_results(athena_client,response
 
 static_datasets_state_abv.head()
 
-
+----------------------------------------------------------------------------------
 # removing first row from table1 beause its showing c0 and c1
 
 new_header=static_datasets_state_abv.iloc[0] #grab the first row the header
@@ -240,5 +240,52 @@ static_datasets_state_abv.columns=new_header# set the header row as the df heade
 
 static_datasets_state_abv.head()
 
+-----------------------------------------------------------------------------------------
 
+
+
+
+#joining two tables base on requremet check diemseison image we requred factCovid
+#here we used pandas
+
+
+
+factCovid_1 =engima_jhud[['fips','province_state',	'country_region','confirmed','deaths','recovered','active']]
+
+factCovid2=rearc_covid_19_testing_data_states_daily[['fips','date','positive','negative','hospitalizedcurrently','hospitalized','hospitalizeddischarged']]
+
+factCovid=pd.merge(factCovid_1,factCovid2,on='fips',how='inner')
+
+factCovid.head()
+
+factCovid.shape
+
+
+
+#dimregiontable (accroding to diemension image)
+
+dimRegion_1=enigma_jhud[['fips','province_state','country_region','latitude','longitude','']]
+dimRegion_2=nytimes_data_in_usa_countryus_county[['fips','county','state']]
+dimRegion=pd.merge(dimRegion_1,dimRegion_2,on'fips',how='inner')
+
+
+dimRegion.head()
+
+dimRegion.shape
+
+--------------------------------------
+#dimhopitaltable (according to diemesnion)
+dimhospital=rearc_usa_hospital_beds[['fips','state_name','latitude','longtitude','hq_address','hospital_name','hospital_type','hq_city','hq_state']]
+
+dimhospital.head()
+
+dimhospital.shape
+----------------------------------------------------
+
+#dimDate table (according to diemesnion)
+dimDate=rearc_covid_19_testing_data_states_daily[['fips',date]]
+
+dimDate.head()
+
+dimDate.shape
 
