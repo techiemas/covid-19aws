@@ -1,0 +1,13 @@
+import boto3
+import pandas as pd
+from io import StringIO # python3: python2: BytesIO
+
+#defining all parametrs
+
+AWS_ACCESS_KEY ='AKIAQM5PKG2LN2JKRLHR'
+AWS_SECRET_KEY ='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'
+AWS_REGION ='ap-south-1'
+SCHEMA_NAME ='covid_dataset' # athena database name
+S3_STAGING_DIR ='s3://vishnu-test-buck/output/' # query output will stored in output folder
+S3_BUCKET_NAME ='vishnu-test-buck'
+S3_OUTPUT_DIRECTORY ='output'
