@@ -293,3 +293,10 @@ dimDate.shape
 
 
 dimDate['date'] = pd.to_datetime(dimDate['date'],format="%Y%m%d")
+
+
+
+#to define ,year,month,day_of_week
+dimDate['year']=dimDate['date'].dt.year
+dimDate['month']=dimDate['date'].dt.month
+dimDate['day_of_week']=dimDate['date'].dt.dayofweek
