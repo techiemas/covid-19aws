@@ -387,3 +387,126 @@ print(" dimDate is saved as CSV in S3 bucket.")
 
 ---------------------------------------------------------------------------------------
 
+# creating a schema of above four tables in pandas
+
+dimDatesql=pd.io.sql.get_schema(dimDate.reset_index(),'dimDate')
+print(''.join(dimDatesql))
+
+
+#table===>dimhospital
+dimhospitalsql=pd.io.sql.get_schema(dimhospital.reset_index(),'dimhospital')
+print(''.join(dimhospitalsql))
+
+
+#table===>factCovid 
+factCovidsql=pd.io.sql.get_schema(factCovid.reset_index(),'factCovid')
+print(''.join(factCovidsql))
+
+
+
+#skipping this one beacuse it take long time and also stuck my computer
+#table===>dimRegion 
+dimRegionsql=pd.io.sql.get_schema(dimRegion.reset_index(),'dimRegion')
+print(''.join(dimRegionsql))
+
+
+------------------------------------------------------------------------
+
+
+import redshift_connector
+
+#now creating a connection betwween python and redshift
+
+
+conn = redshift_connector.connect(
+    host='redshift-cluster-1.cafwxanap8ta.ap-south-1.redshift.amazonaws.com',
+    database='dev',
+    user="awsuser",
+    password='Sahil1234'
+)
+
+conn.autocommit=True
+
+
+cursor=redshift_connector.Cursor = conn.cursor()
+
+--------------------------------------------------------
+
+#now creating table in redshift
+#table-->dimDate
+
+cursor.execute("""
+CREATE TABLE "dimDate"(
+"index" INTEGER,
+  "fips" REAL,
+  "date" TIMESTAMP,
+  "year" INTEGER,
+  "month" INTEGER,
+  "day_of_week" INTEGER
+)
+""")
+
+
+
+
+#table-->dimhospital
+
+cursor.execute("""
+CREATE TABLE "dimhospital" (
+"index" INTEGER,
+  "fips" REAL,
+  "state_name" TEXT,
+  "latitude" REAL,
+  "longtitude" REAL,
+  "hq_address" TEXT,
+  "hospital_name" TEXT,
+  "hospital_type" TEXT,
+  "hq_city" TEXT,
+  "hq_state" TEXT
+)
+""")
+
+
+
+
+#table-->factCovid
+
+cursor.execute("""
+CREATE TABLE "factCovid" (
+"index" INTEGER,
+  "fips" REAL,
+  "province_state" TEXT,
+  "country_region" TEXT,
+  "confirmed" REAL,
+  "deaths" REAL,
+  "recovered" REAL,
+  "active" REAL,
+  "date" INTEGER,
+  "positive" INTEGER,
+  "negative" REAL,
+  "hospitalizedcurrently" REAL,
+  "hospitalized" REAL,
+  "hospitalizeddischarged" REAL
+)
+""")
+
+
+
+
+
+#table-->dimRegion
+
+cursor.execute("""
+CREATE TABLE "dimRegion" (
+"index" INTEGER,
+  "fips" REAL,
+  "province_state" TEXT,
+  "country_region" TEXT,
+  "latitude" REAL,
+  "longitude" REAL,
+  "county" TEXT,
+  "state" TEXT
+  
+)
+""")
+-------------------------------------------------------------------------------------------------------------------------
