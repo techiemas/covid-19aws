@@ -300,3 +300,90 @@ dimDate['date'] = pd.to_datetime(dimDate['date'],format="%Y%m%d")
 dimDate['year']=dimDate['date'].dt.year
 dimDate['month']=dimDate['date'].dt.month
 dimDate['day_of_week']=dimDate['date'].dt.dayofweek
+
+------------------------------------------------------------
+#error in this code
+#now saving all diemansion model table into s3
+
+bucket='vishnu-covid-de-project' #already created on s3
+
+csv_buffer =StringIO()
+csv_buffer
+factCovid.to_csv(csv_buffer)
+
+
+s3_resource=boto3.resource('s3')
+s3_resource.Object(bucket,'output/factCovid.csv').put(Body=csv_buffer.getvalue())
+
+
+------------------------------------------------------------------------------------------------
+
+
+
+#solution
+#table ==>factCovid
+#Creating Session With Boto3.
+
+session = boto3.Session(
+aws_access_key_id=AWS_ACCESS_KEY,
+aws_secret_access_key=AWS_SECRET_KEY
+)
+#Creating S3 Resource From the Session.
+s3_res = session.resource('s3')
+csv_buffer = StringIO()
+factCovid.to_csv(csv_buffer)
+bucket_name = 'vishnu-covid-de-project'
+s3_object_name = 'factCovid.csv'
+s3_res.Object(bucket_name, 'output/factCovid.csv').put(Body=csv_buffer.getvalue())
+print(" factCovid is saved as CSV in S3 bucket.")
+
+-------------------------------------------------
+
+
+#solution
+#table ==>dimRegion (it would take one hour to write beacuse size is 2.4gb)
+
+#Creating S3 Resource From the Session.
+s3_res = session.resource('s3')
+csv_buffer = StringIO()
+dimRegion.to_csv(csv_buffer)
+bucket_name = 'vishnu-covid-de-project'
+s3_object_name = 'output/dimRegion.csv'
+s3_res.Object(bucket_name, s3_object_name).put(Body=csv_buffer.getvalue())
+print(" dimRegion is saved as CSV in S3 bucket.")
+
+-------------------------------------------------------------------------
+
+
+
+#solution
+#table ==>dimhospital
+
+#Creating S3 Resource From the Session.
+s3_res = session.resource('s3')
+csv_buffer = StringIO()
+dimhospital.to_csv(csv_buffer)
+bucket_name = 'vishnu-covid-de-project'
+s3_object_name = 'output/dimhospital.csv'
+s3_res.Object(bucket_name, s3_object_name).put(Body=csv_buffer.getvalue())
+print(" dimhospital is saved as CSV in S3 bucket.")
+
+
+----------------------------------------------------------------------------------------
+
+
+#solution
+#table ==>dimDate
+
+
+#Creating S3 Resource From the Session.
+s3_res = session.resource('s3')
+csv_buffer = StringIO()
+dimDate.to_csv(csv_buffer)
+bucket_name = 'vishnu-covid-de-project'
+s3_object_name = 'output/dimDate.csv'
+s3_res.Object(bucket_name, s3_object_name).put(Body=csv_buffer.getvalue())
+print(" dimDate is saved as CSV in S3 bucket.")
+
+---------------------------------------------------------------------------------------
+
